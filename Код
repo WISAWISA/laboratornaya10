@@ -1,0 +1,70 @@
+#include <stdio.h>
+ 
+int main()
+{
+ FILE *fpin;
+ FILE *fpout;
+ char *ptr;
+ char line[1024];
+ char words[500][30];
+ int wrd_in_str[30];
+ int word_cnt;
+ int letters;
+ int i;
+ int str;
+ 
+ word_cnt = 0;
+ str = 0;
+ 
+ fpin = fopen( "test.txt", "rt" );
+ if( fpin == NULL )
+   return 1;
+ 
+ fpout = fopen( "result.txt", "wt" );
+ if( fpout == NULL )
+   return 1;
+ 
+ while( fpin != NULL )
+ {
+   i = 0;
+   ptr = fgets( line, 1024, fpin );
+ 
+   if( ptr == NULL )
+     break;
+ 
+   while( *ptr != '\0' )
+   {
+     letters = 0;
+     while( *ptr != ' ' && *ptr != '\n' && *ptr != '\0' )
+     {
+       words[word_cnt][letters] = *ptr;
+       ptr++;
+       letters++;
+     }
+     words[word_cnt][letters] = '\0';
+     word_cnt++;
+     i++;
+ 
+     if( *ptr != '\0' )
+       ptr++;
+   }
+   wrd_in_str[str] = i;
+   str++;
+ }
+ 
+ i = 0;
+ word_cnt--;
+ while( str != 0 )
+ {
+   while( wrd_in_str[i] != 0 )
+   {
+     fprintf( fpout, "%s", words[word_cnt] );
+     word_cnt--;
+     wrd_in_str[i]--;
+     fputc( ' ', fpout );
+   }
+   fputc( '\n', fpout );
+   str--;
+   i++;
+ }
+}
